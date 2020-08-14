@@ -33,5 +33,5 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: test-step1
-      run: nslookup
+      run: echo "I'm running"
 
