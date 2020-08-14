@@ -31,7 +31,7 @@ jobs:
     steps:
     # Runs a single command using the runners shell
     - name: Send greeting
-      run: echo "Hello ${{ github.event.inputs.name }}"
+      run: echo "Hello ${{ github.event.inputs.name }}, job will start soon.."
             
   Install:
     runs-on: ubuntu-latest
@@ -43,4 +43,14 @@ jobs:
       uses: actions/setup-python@v1
       with:
         python-version: ${{ matrix.python-version }}
+
+    - name: Install databricks cli
+      run: |
+        python --version
+        pip --version
+        python -m pip install --upgrade pip
+        pip --version
+        pip install databricks-cli
+        echo "Installed Databricks CLI"
+  
 
