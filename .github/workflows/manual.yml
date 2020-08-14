@@ -60,5 +60,8 @@ jobs:
         DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
         DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
 
+    - name: list workspace
+      run: |
+        databricks workspace ls
 
 
