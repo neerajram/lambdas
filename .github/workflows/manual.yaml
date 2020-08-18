@@ -47,7 +47,7 @@ jobs:
         databricks --version
         echo "trying to import code into databricks.."
         #databricks workspace ls
-        databricks workspace import_dir zoetis-comm/. /Users/ram.motaparthy@zoetis.com/databricks-test1 --overwrite --exclude-hidden-files
+        databricks workspace import_dir . /Users/ram.motaparthy@zoetis.com/databricks-test1 --overwrite --exclude-hidden-files
 
       env:
         DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
