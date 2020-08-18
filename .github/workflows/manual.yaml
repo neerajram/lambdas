@@ -1,42 +1,20 @@
 # This is a basic workflow that is manually triggered
 
-name: Manual workflow
+name: Import databricks notebooks
 
 # Controls when the action will run. Workflow runs when manually triggered using the UI
 # or API.
-on:
-  workflow_dispatch:
-    # Inputs the workflow accepts.
-    inputs:
-      name:
-        # Friendly description to be shown in the UI instead of 'name'
-        description: 'Person to greet'
-        # Default value if no value is explicitly provided
-        default: 'World'
-        # Input has to be provided for the workflow to run
-        required: true
+on: create
+
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
-jobs:
-  # This workflow contains a single job called "greet"
-  greet:
-    # The type of runner that the job will run on
+jobs:          
+  Build:
+    if: ${{ contains(github.ref, 'refs/heads/feature/') }}
     runs-on: ubuntu-latest
     strategy:
-      max-parallel: 4
-
-
-    # Steps represent a sequence of tasks that will be executed as part of the job
+      max-parallel: 1
     steps:
-    # Runs a single command using the runners shell
-    - name: Send greeting
-      run: echo "Hello ${{ github.event.inputs.name }}, job will start soon.."
-            
-  Install:
-    runs-on: ubuntu-latest
-    steps:
-    - name: Echo Install
-      run: echo "installing Python..."
       
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v1
@@ -51,15 +29,21 @@ jobs:
         pip --version
         pip install databricks-cli
         echo "Installed Databricks CLI"
+
+    - name: Checkout Code
+      uses: actions/checkout@v2
+      with:
+        repository: ${{ github.repository }}
+        ref: 'databricks-int'
+        path: ${{ github.repository }}
   
-    - name: Configure Databricks CLI
+    - name: Import notebooks into databricks workspace
       run: |
         databricks --version
-        databricks workspace ls
+        echo "trying to import code into databricks.."
+        #databricks workspace ls
+        databricks workspace import_dir zoetis-comm/. /Users/ram.motaparthy@zoetis.com/databricks-test1 --overwrite --exclude-hidden-files
+
       env:
         DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
         DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
-
-    - name: list workspace
-      run: |
-        databricks workspace ls
