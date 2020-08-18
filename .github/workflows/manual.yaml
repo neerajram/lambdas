@@ -30,13 +30,18 @@ jobs:
         pip install databricks-cli
         echo "Installed Databricks CLI"
 
+    - name: Extract branch name
+      shell: bash
+      run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+      id: extract_branch
+
     - name: Checkout Code
       uses: actions/checkout@v2
       with:
         repository: ${{ github.repository }}
-        ref: 'databricks-int'
+        ref: ${{ steps.extract_branch.outputs.branch }}
         path: ${{ github.repository }}
-  
+
     - name: Import notebooks into databricks workspace
       run: |
         databricks --version
