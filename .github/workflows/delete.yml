@@ -1,0 +1,13 @@
+name: Test delete
+
+on: delete
+jobs:
+  Delete:
+    if: github.event.ref_type == 'branch'
+    runs-on: ubuntu-latest
+    strategy:
+      max-parallel: 1
+    steps:
+      - name: Clean up
+        run: |
+          echo "Clean up for branch ${{ github.event.ref }}"
